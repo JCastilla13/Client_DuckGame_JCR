@@ -19,7 +19,7 @@ public class Register_Screen : MonoBehaviour
 
     private void Clicked()
     {
-        // Mando la info al network manager
+        //Mando la info al network manager
         string race = raceDropdown.options[raceDropdown.value].text;
         Network_Manager._NETWORK_MANAGER.ConnectToServerForRegister(registerText.text.ToString(), passwordText.text.ToString(), race);
     }

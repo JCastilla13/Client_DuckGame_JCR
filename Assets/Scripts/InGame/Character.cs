@@ -47,7 +47,7 @@ public class Character : MonoBehaviourPun, IPunObservable
         PhotonNetwork.SendRate = 20;
         PhotonNetwork.SerializationRate = 20;
 
-        // Obtiene los valores de speed y jumpforce
+        //Obtiene los valores de speed y jumpforce
         speed = PlayerPrefs.GetFloat("speed");
         jumpForce = PlayerPrefs.GetFloat("jumpforce");
     }
@@ -89,7 +89,9 @@ public class Character : MonoBehaviourPun, IPunObservable
     {
         if (pv.IsMine)
         {
-            float horizontalVelocity = desiredMovementAxis * speed * Time.fixedDeltaTime;
+            float horizontalInput = Input_Manager._INPUT_MANAGER.GetLeftAxisUpdate().x;
+
+            float horizontalVelocity = horizontalInput * speed * Time.fixedDeltaTime;
 
             rb.velocity = new Vector2(horizontalVelocity, rb.velocity.y);
 
@@ -103,16 +105,17 @@ public class Character : MonoBehaviourPun, IPunObservable
                 sr.flipX = true;
                 bulletSpawner.transform.localPosition = new Vector3(-1f, 0f, 0f);
             }
-            anim.SetBool("IsMoving", horizontalVelocity != 0);
 
+            anim.SetBool("IsMoving", horizontalInput != 0);
         }
     }
+
 
     private void CheckInputs()
     {
         desiredMovementAxis = Input.GetAxisRaw("Horizontal");
 
-        if (Input.GetButtonDown("Jump") && Mathf.Approximately(rb.velocity.y, 0f))
+        if (Input_Manager._INPUT_MANAGER.GetJumpButton() && Mathf.Approximately(rb.velocity.y, 0f))
         {
             rb.AddForce(new Vector2(0f, jumpForce));
             anim.SetBool("IsJumping", true);
@@ -129,7 +132,7 @@ public class Character : MonoBehaviourPun, IPunObservable
         }
 
 
-        if (Input.GetKeyDown(KeyCode.LeftControl) && lastTimeShoot <= 0 && !cooldownReady)
+        if (Input_Manager._INPUT_MANAGER.GetShootButton() && lastTimeShoot <= 0 && !cooldownReady)
         {
             Shoot();
             lastTimeShoot = timeToShoot;

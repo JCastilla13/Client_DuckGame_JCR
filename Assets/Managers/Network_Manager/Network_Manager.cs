@@ -88,7 +88,7 @@ public class Network_Manager : MonoBehaviour
                     float speed = float.Parse(parts[1]);
                     float jumpForce = float.Parse(parts[2]);
 
-                    // Almacena los valores de speed y jumpforce en PlayerPrefs
+                    //Almacena los valores de speed y jumpforce en PlayerPrefs
                     Character.SetPlayerSpeed(speed);
                     Character.SetPlayerJumpForce(jumpForce);
                 }
@@ -106,11 +106,6 @@ public class Network_Manager : MonoBehaviour
             {
                 loginError.SetActive(true);
             }
-            //else if (response == "already_logged_in")
-            //{
-            //    Debug.Log("Ya hay alguien logueado con este usuario.");
-            //    return;
-            //}
         }
         catch (Exception ex)
         {
@@ -145,12 +140,12 @@ public class Network_Manager : MonoBehaviour
                 Debug.Log("Nuevo registro");
                 registerError.SetActive(false);
 
-                // Extrae los valores de speed y jumpforce del mensaje
+                //Extrae los valores de speed y jumpforce del mensaje
                 string[] parts = response.Split('/');
                 float speed = float.Parse(parts[1]);
                 float jumpforce = float.Parse(parts[2]);
 
-                // Almacena los valores de speed y jumpforce en PlayerPrefs
+                //Almacena los valores de speed y jumpforce en PlayerPrefs
                 PlayerPrefs.SetFloat("speed", speed);
                 PlayerPrefs.SetFloat("jumpforce", jumpforce);
             }
