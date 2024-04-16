@@ -6,8 +6,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform spawnPoint1;
     [SerializeField] private Transform spawnPoint2;
 
-    private Color player2Color = Color.yellow;
-
     private void Awake()
     {
         if (PhotonNetwork.IsMasterClient)
@@ -16,12 +14,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            GameObject player2 = SpawnPlayer("Player2Race", spawnPoint2.position);
-            Character character = player2.GetComponent<Character>();
-            if (character != null)
-            {
-                character.SetPlayerColor(player2Color);
-            }
+            SpawnPlayer("Player2Race", spawnPoint2.position);
         }
     }
 

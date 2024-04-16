@@ -9,7 +9,6 @@ public class Character : MonoBehaviourPun, IPunObservable
     private float jumpForce;
     private Rigidbody2D rb;
     public SpriteRenderer sr;
-    private Color playerColor = Color.white;
     public Animator anim;
     private float desiredMovementAxis = 0f;
     private PhotonView pv;
@@ -50,7 +49,33 @@ public class Character : MonoBehaviourPun, IPunObservable
         //Obtiene los valores de speed y jumpforce
         speed = PlayerPrefs.GetFloat("speed");
         jumpForce = PlayerPrefs.GetFloat("jumpforce");
+
+        int localPlayerNum = PhotonNetwork.LocalPlayer.ActorNumber;
+
+        if (localPlayerNum == 1)
+        {
+            if (pv.IsMine)
+            {
+                sr.color = Color.yellow;
+            }
+            else
+            {
+                sr.color = Color.red;
+            }
+        }
+        else
+        {
+            if (pv.IsMine)
+            {
+                sr.color = Color.red;
+            }
+            else
+            {
+                sr.color = Color.yellow;
+            }
+        }
     }
+
     private void Start()
     {
         //Asigna los valores de speed y jumpforce a las variables de instancia
@@ -215,11 +240,5 @@ public class Character : MonoBehaviourPun, IPunObservable
     public static void SetPlayerJumpForce(float jumpForce)
     {
         PlayerJumpForce = jumpForce;
-    }
-
-    public void SetPlayerColor(Color color)
-    {
-        playerColor = color;
-        sr.color = playerColor;
     }
 }
