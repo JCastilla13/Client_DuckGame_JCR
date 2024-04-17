@@ -74,8 +74,6 @@ public class Photon_Manager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        //Esta funcion puede coger el nick del pj
-
         if(PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers && PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.LoadLevel("InGame");
