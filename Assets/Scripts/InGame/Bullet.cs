@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour
     private Rigidbody2D rb;
     private bool characterLooksRight = true;
 
-    private PhotonView pv;
+    private PhotonView pv; //Componente PhotonView para la sincronización de la red
 
     private void Awake()
     {
@@ -35,9 +35,10 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        //Miramos si la bala instanciada es del jugador local
         if (!pv.IsMine)
         {
-            return;
+            return; //Salimos de la funcion si no es del jugador local
         }
 
         if (collision.gameObject.CompareTag("Player"))

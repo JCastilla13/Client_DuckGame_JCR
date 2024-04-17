@@ -39,6 +39,7 @@ public class Network_Manager : MonoBehaviour
         }
     }
 
+    //Revisa los datos que llegan del servidor
     private void ManageData(string data)
     {
         if (data == "Ping")
@@ -64,24 +65,31 @@ public class Network_Manager : MonoBehaviour
         }
     }
 
+    //Nos conectamos al servidor para poder loguearnos
     public void ConnectToServerForLogin(string nick, string password)
     {
         try
         {
+            //Nos conectamos al servidor
             socket = new TcpClient(host, port);
             stream = socket.GetStream();
             writer = new StreamWriter(stream);
             reader = new StreamReader(stream);
             connected = true;
 
+            //Pedimos loguearnos al servidor
             writer.WriteLine("LOGIN/" + nick + "/" + password);
             writer.Flush();
 
+            //Leemos la respuesta del servidor
             string response = reader.ReadLine();
             if (response.StartsWith("true"))
             {
+                //Si se completa el login establecemos el nombre de usuario local
                 PhotonNetwork.LocalPlayer.NickName = nick;
                 Debug.Log("Login exitoso.");
+
+                //Extraemos los valores adicionales de la respuesta del servidor
                 string[] parts = response.Split('/');
                 if (parts.Length >= 3)
                 {
@@ -97,6 +105,7 @@ public class Network_Manager : MonoBehaviour
                     Debug.Log("La respuesta del servidor no contiene los valores de speed y jumpforce.");
                 }
 
+                //Activamos la pantalla de crear unir sala
                 registerScreen.SetActive(false);
                 loginScreen.SetActive(false);
                 matchmakingScreen.SetActive(true);
@@ -104,6 +113,7 @@ public class Network_Manager : MonoBehaviour
             }
             else if (response == "false")
             {
+                //Si se falla el inicio de sesion salta error
                 loginError.SetActive(true);
             }
         }
@@ -116,27 +126,33 @@ public class Network_Manager : MonoBehaviour
     {
         if (connected)
         {
+            //Enviamos mensaje de desconexion al servidor al cerrar la aplicacion
             writer.WriteLine("QUIT/" + PhotonNetwork.LocalPlayer.NickName);
             writer.Flush();
         }
     }
 
+    //Nos conectamos al servidor para poder registrarnos
     public void ConnectToServerForRegister(string nick, string password, string race)
     {
         try
         {
+            //Nos conectamos al servidor
             socket = new TcpClient(host, port);
             stream = socket.GetStream();
             writer = new StreamWriter(stream);
             reader = new StreamReader(stream);
             connected = true;
 
+            //Enviamos solicitud de registro al servidor
             writer.WriteLine("REGISTER/" + nick + "/" + password + "/" + race);
             writer.Flush();
 
+            //Leemos respuesta del servidor
             string response = reader.ReadLine();
             if (response.StartsWith("true"))
             {
+                //Si el registro es correcto ocultamos el mensaje de error de registro
                 Debug.Log("Nuevo registro");
                 registerError.SetActive(false);
 
@@ -151,6 +167,7 @@ public class Network_Manager : MonoBehaviour
             }
             else if (response == "false")
             {
+                //Cuando nos registramos con un usuario ya existente salta el mensaje de error
                 Debug.Log("El usuario ya existe.");
                 registerError.SetActive(true);
             }
